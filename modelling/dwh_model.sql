@@ -1,22 +1,35 @@
-DROP DATABASE [apartments_and_crime_dwh]
+USE master
+GO
+IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'ApartmentsxCrimeDWH')
+BEGIN
+	ALTER DATABASE [ApartmentsxCrimeDWH] set single_user with rollback immediate
+	DROP DATABASE [ApartmentsxCrimeDWH];
+END
+GO
 
-CREATE DATABASE [apartments_and_crime_dwh]
+CREATE DATABASE [ApartmentsxCrimeDWH]
 GO
-USE [apartments_and_crime_dwh]
+USE [ApartmentsxCrimeDWH]
 GO
+
 
 CREATE TABLE [dbo].[DimApartment](
-	[ApartmentKey] [bigint] NOT NULL,
+	[ApartmentID] [bigint] NOT NULL,
 	[ApartmentSource] [nvarchar](50) NOT NULL,
 	[OfferTitle] [nvarchar](100) NOT NULL,
 	[OfferBody] [text] NOT NULL,
+	[PaymentFrequency] [nvarchar](50) NOT NULL,
+	[allowsPets] [bit] NOT NULL,
+	[allowsDogs] [bit] NOT NULL,
+	[allowsCats] [bit] NOT NULL,
+	[hasPhoto] [bit] NOT NULL,
 	[hasParking] [bit] NOT NULL,
 	[hasGym] [bit] NOT NULL,
 	[hasPool] [bit] NOT NULL,
 	[hasDishwasher] [bit] NOT NULL,
 	[hasAC] [bit] NOT NULL,
 	[hasElevator] [bit] NOT NULL,
-	[hasPatioDeck] [bit] NOT NULL,
+	[hasPatioOrDeck] [bit] NOT NULL,
 	[hasPlayground] [bit] NOT NULL,
 	[hasStorage] [bit] NOT NULL,
 	[hasClubhouse] [bit] NOT NULL,
@@ -24,7 +37,6 @@ CREATE TABLE [dbo].[DimApartment](
  -- mo¿e dodaæ wiêcej has na podstawie kolumny amenities
 
 CREATE TABLE [dbo].[DimDate](
-	[DateKey] [bigint] NOT NULL,
 	[Date] [date] NOT NULL,
 	[DayNumber] [tinyint] NOT NULL,
 	[DaySuffix] [char](2) NOT NULL,
@@ -46,51 +58,44 @@ CREATE TABLE [dbo].[DimDate](
 	[evening] [bit] NOT NULL
 )
 CREATE TABLE [dbo].[DimLocation](
-	[LocationKey] [bigint] NOT NULL,
+	[LocationID] [bigint] NOT NULL,
 	[PremisCode] [char](3) NOT NULL,
 	[PremisDesc] [nvarchar](100) NOT NULL,
-	[LAT] [nvarchar](100) NOT NULL,
-	[LON] [nvarchar](50) NOT NULL)
+	[Latitude] [decimal] NOT NULL,
+	[Longtitude] [decimal] NOT NULL,
+	[PoliceStationAssignedCode] [char](2))
+
 
 CREATE TABLE [dbo].[DimCrime](
-	[ProductKey] [bigint] NOT NULL,
-	[ProductName] [nvarchar](100) NOT NULL,
-	[CategoryName] [nvarchar](50) NOT NULL,
-	[QuantityPerUnit] [nvarchar](50) NOT NULL,
-	[UnitPrice] [money] NOT NULL,
-	[StockUnitsCount] [smallint] NOT NULL,
-	[OrderUnitsCount] [smallint] NOT NULL,
-	[ReorderLevelNumber] [smallint] NOT NULL,
-	[DiscontinuedFlag] [bit] NOT NULL)
+	[CrimeID] [bigint] NOT NULL,
+	[CrimeCode] [char](3) NOT NULL,
+	[CrimeName] [nvarchar](50) NOT NULL,
+	-- mo¿e dodaæ wybrane Modus Operandi jako zmienne binarne
+	[VictimSex] [char](1) NOT NULL,
+	[VictimDescent] [char](1) NOT NULL,
+	[hasWeapon] [bit] NOT NULL,
+	[WeaponCode] [char](3) ,
+	[WeaponName] [nvarchar](50),
+	[Status] [nvarchar](50))
 
 CREATE TABLE [dbo].[FactCrimeEvent](
-	[OrderFactKey] [bigint] NOT NULL,
-	[OrderKey] [bigint] NOT NULL,
-	[ProductKey] [bigint] NOT NULL,
-	[CustomerKey] [bigint] NOT NULL,
-	[EmployeeKey] [bigint] NOT NULL,
-	[ShipDetailKey] [bigint] NOT NULL,
-	[ProductSupplierKey] [bigint] NOT NULL,
-	[OrderDateKey] [bigint] NOT NULL,
-	[RequiredDateKey] [bigint] NOT NULL,
-	[ShippedDateKey] [bigint] NOT NULL,
-	[FreightAmount] [money] NOT NULL,
-	[UnitPrice] [money] NOT NULL,
-	[Quantity] [smallint] NOT NULL,
-	[DiscountPercent] [real] NOT NULL)
+	[CrimeEventID] [bigint] NOT NULL,
+	-- czasem w jednym zdarzeniu pope³niono pare przestêpstw
+	[CrimeID] [bigint] NOT NULL,
+	[LocationID] [bigint] NOT NULL,
+	[Date] [date] NOT NULL,
+	[VictimAge] [int] NOT NULL,
+	[NumberOfCrimesAtEvent] [int] NOT NULL)
 
 	CREATE TABLE [dbo].[FactRentalOffer](
-	[OrderFactKey] [bigint] NOT NULL,
-	[OrderKey] [bigint] NOT NULL,
-	[ProductKey] [bigint] NOT NULL,
-	[CustomerKey] [bigint] NOT NULL,
-	[EmployeeKey] [bigint] NOT NULL,
-	[ShipDetailKey] [bigint] NOT NULL,
-	[ProductSupplierKey] [bigint] NOT NULL,
-	[OrderDateKey] [bigint] NOT NULL,
-	[RequiredDateKey] [bigint] NOT NULL,
-	[ShippedDateKey] [bigint] NOT NULL,
-	[FreightAmount] [money] NOT NULL,
-	[UnitPrice] [money] NOT NULL,
-	[Quantity] [smallint] NOT NULL,
-	[DiscountPercent] [real] NOT NULL)
+	[OfferID] [bigint] NOT NULL,
+	[ApartmentID] [bigint] NOT NULL,
+	[LocationID] [bigint] NOT NULL,
+	[Date] [date] NOT NULL,
+	[NumberOfBedrooms] [decimal] NOT NULL,
+	[NumberOfBathrooms] [decimal] NOT NULL,
+	[Price] [money] NOT NULL,
+	[Currency] [char](3) NOT NULL,
+	[SquareFeet] [decimal] NOT NULL,
+	[SquareMeters] [decimal] NOT NULL)
+	
