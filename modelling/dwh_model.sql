@@ -1,6 +1,6 @@
 USE [ApartmentsxCrimeDWH]
 GO
-/****** Object:  Table [dbo].[DimApartment]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[DimApartment]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -11,7 +11,6 @@ CREATE TABLE [dbo].[DimApartment](
 	[OfferTitle] [nvarchar](100) NOT NULL,
 	[OfferBody] [text] NOT NULL,
 	[PaymentFrequency] [nvarchar](50) NOT NULL,
-	[allowsPets] [bit] NOT NULL,
 	[allowsDogs] [bit] NOT NULL,
 	[allowsCats] [bit] NOT NULL,
 	[hasPhoto] [bit] NOT NULL,
@@ -32,7 +31,7 @@ CREATE TABLE [dbo].[DimApartment](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DimCrime]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[DimCrime]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -46,7 +45,7 @@ CREATE TABLE [dbo].[DimCrime](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DimDate]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[DimDate]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -75,7 +74,7 @@ CREATE TABLE [dbo].[DimDate](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DimLocation]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[DimLocation]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -92,7 +91,7 @@ CREATE TABLE [dbo].[DimLocation](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DimWeapon]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[DimWeapon]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -106,7 +105,7 @@ CREATE TABLE [dbo].[DimWeapon](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FactCrimeEvent]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[FactCrimeEvent]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -128,7 +127,7 @@ CREATE TABLE [dbo].[FactCrimeEvent](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FactRentalOffer]    Script Date: 17.05.2024 10:09:44 ******/
+/****** Object:  Table [dbo].[FactRentalOffer]    Script Date: 17.05.2024 10:13:54 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
