@@ -85,7 +85,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[FactCrimeEvent](
-	[CrimeEventID] [bigint] NOT NULL,
+	[CrimeEventID] [bigint] IDENTITY(1,1) NOT NULL,
 	[LocationID] [bigint] NOT NULL,
 	[EventKey] [int] NOT NULL, -- KLUCZ ZDEGENEROWANY
 	[Date] [date] NOT NULL,
