@@ -1,6 +1,6 @@
 USE [ApartmentsxCrimeDWH]
 GO
-/****** Object:  Table [dbo].[DimApartment]    Script Date: 17.05.2024 12:51:26 ******/
+/****** Object:  Table [dbo].[DimApartment]    Script Date: 27.05.2024 18:05:32 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -8,6 +8,9 @@ GO
 CREATE TABLE [dbo].[DimApartment](
 	[ApartmentID] [bigint] IDENTITY(1,1) NOT NULL,
 	[ApartmentSource] [nvarchar](50) NOT NULL,
+	[status] [nchar](10) NOT NULL,
+	[validFrom] [date] NOT NULL,
+	[validTo] [date] NOT NULL,
 	[OfferTitle] [nvarchar](100) NOT NULL,
 	[OfferBody] [text] NOT NULL,
 	[PaymentFrequency] [nvarchar](50) NOT NULL,
@@ -35,7 +38,7 @@ CREATE TABLE [dbo].[DimApartment](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DimDate]    Script Date: 17.05.2024 12:51:26 ******/
+/****** Object:  Table [dbo].[DimDate]    Script Date: 27.05.2024 18:05:32 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -61,7 +64,7 @@ CREATE TABLE [dbo].[DimDate](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DimLocation]    Script Date: 17.05.2024 12:51:26 ******/
+/****** Object:  Table [dbo].[DimLocation]    Script Date: 27.05.2024 18:05:32 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -78,7 +81,7 @@ CREATE TABLE [dbo].[DimLocation](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FactCrimeEvent]    Script Date: 17.05.2024 12:51:26 ******/
+/****** Object:  Table [dbo].[FactCrimeEvent]    Script Date: 27.05.2024 18:05:32 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -86,7 +89,7 @@ GO
 CREATE TABLE [dbo].[FactCrimeEvent](
 	[CrimeEventID] [bigint] IDENTITY(1,1) NOT NULL,
 	[LocationID] [bigint] NOT NULL,
-	[EventKey] [int] NOT NULL, -- KLUCZ ZDEGENEROWANY w pierwotnej tabeli DR_NO
+	[EventKey] [int] NOT NULL,
 	[Date] [date] NOT NULL,
 	[CrimeName] [nvarchar](50) NOT NULL,
 	[WeaponName] [nvarchar](50) NOT NULL,
@@ -94,14 +97,14 @@ CREATE TABLE [dbo].[FactCrimeEvent](
 	[VictimDescent] [char](1) NOT NULL,
 	[VictimAge] [int] NOT NULL,
 	[Status] [nvarchar](50) NOT NULL,
-	[ResolvedDate] [date] NULL, -- korzystamy z accumulative snapshot fact table (w przysz³oœci przewidujemy datê zakoñczenia sprawy i zmianê statusu)
+	[ResolvedDate] [date] NULL,
  CONSTRAINT [PK_FactCrimeEvent] PRIMARY KEY CLUSTERED 
 (
 	[CrimeEventID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FactRentalOffer]    Script Date: 17.05.2024 12:51:26 ******/
+/****** Object:  Table [dbo].[FactRentalOffer]    Script Date: 27.05.2024 18:05:32 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -118,6 +121,16 @@ CREATE TABLE [dbo].[FactRentalOffer](
 	[OfferID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[DimApartment]  WITH CHECK ADD  CONSTRAINT [FK_DimApartment_DimDate] FOREIGN KEY([validFrom])
+REFERENCES [dbo].[DimDate] ([Date])
+GO
+ALTER TABLE [dbo].[DimApartment] CHECK CONSTRAINT [FK_DimApartment_DimDate]
+GO
+ALTER TABLE [dbo].[DimApartment]  WITH CHECK ADD  CONSTRAINT [FK_DimApartment_DimDate1] FOREIGN KEY([validTo])
+REFERENCES [dbo].[DimDate] ([Date])
+GO
+ALTER TABLE [dbo].[DimApartment] CHECK CONSTRAINT [FK_DimApartment_DimDate1]
 GO
 ALTER TABLE [dbo].[FactCrimeEvent]  WITH CHECK ADD  CONSTRAINT [FK_FactCrimeEvent_DimDate] FOREIGN KEY([Date])
 REFERENCES [dbo].[DimDate] ([Date])
@@ -139,10 +152,10 @@ REFERENCES [dbo].[DimApartment] ([ApartmentID])
 GO
 ALTER TABLE [dbo].[FactRentalOffer] CHECK CONSTRAINT [FK_FactRentalOffer_DimApartment]
 GO
-ALTER TABLE [dbo].[FactRentalOffer]  WITH CHECK ADD  CONSTRAINT [FK_FactRentalOffer_DimDate] FOREIGN KEY([Date])
+ALTER TABLE [dbo].[FactRentalOffer]  WITH CHECK ADD  CONSTRAINT [FK_FactRentalOffer_DimDate1] FOREIGN KEY([Date])
 REFERENCES [dbo].[DimDate] ([Date])
 GO
-ALTER TABLE [dbo].[FactRentalOffer] CHECK CONSTRAINT [FK_FactRentalOffer_DimDate]
+ALTER TABLE [dbo].[FactRentalOffer] CHECK CONSTRAINT [FK_FactRentalOffer_DimDate1]
 GO
 ALTER TABLE [dbo].[FactRentalOffer]  WITH CHECK ADD  CONSTRAINT [FK_FactRentalOffer_DimLocation] FOREIGN KEY([LocationID])
 REFERENCES [dbo].[DimLocation] ([LocationID])
