@@ -10,8 +10,8 @@ This is a comprehensive Data warehosue project involving:
 # Reports
 
 ![Guide Page](/PowerBI/Reports/Guide.png)
-![Crime Page](/PowerBI/Reports/Crime.png)
 ![Apart Page](/PowerBI/Reports/Apart.png)
+![Crime Page](/PowerBI/Reports/Crime.png)
 ![Cheapest Apartment](/PowerBI/Reports/CheapestApart.png)
 ![Crime around cheapest apartment](/PowerBI/Reports/CrimeAroundCheapest.png)
 
