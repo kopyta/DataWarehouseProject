@@ -8,3 +8,11 @@ This is a comprehensive Data warehosue project involving:
 ![Data warehouse model diagram](/modelling/dwh_model.png)
 
 # Reports
+
+![Guide Page](/PowerBI/Reports/Guide.png)
+![Crime Page](/PowerBI/Reports/Crime.png)
+![Apart Page](/PowerBI/Reports/Apart.png)
+![Cheapest Apartment](/PowerBI/Reports/CheapestApart.png)
+![Crime around cheapest apartment](/PowerBI/Reports/CrimeAroundCheapest.png)
+
+
