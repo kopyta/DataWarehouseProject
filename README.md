@@ -5,6 +5,6 @@ This is a comprehensive Data warehosue project involving:
 +  the seamless and efficient population and integration of the data into the predefined data warehouse,
 +  the in-depth analysis of insights using advanced Business Intelligence system.
 # Data warehouse model
-![Data warehouse model diagram](/modelling/dwh_model_diagram.png)
+![Data warehouse model diagram](/modelling/dwh_model.png)
 
 # Reports
